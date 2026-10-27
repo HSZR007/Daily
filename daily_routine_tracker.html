@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پلن روزانه">
+<meta name="theme-color" content="#0f766e">
+<meta name="description" content="پلن روزانه نظم، یادگیری و ترید">
+<title>پلن روزانه من</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230f766e' width='100' height='100' rx='22'/><text y='68' x='50' text-anchor='middle' font-size='52'>📋</text></svg>">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css">
+<style>
+:root {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --soft: #f8fafc;
+  --accent: #0d9488;
+  --accent-dark: #0f766e;
+  --accent-light: #2dd4bf;
+  --accent-soft: #ccfbf1;
+  --card: #ffffff;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --radius: 16px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { height: 100%; }
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #f0fdfa;
+  color: var(--ink);
+  font-family: Vazirmatn, -apple-system, Tahoma, sans-serif;
+  line-height: 1.7;
+  padding: 0;
+  padding-top: var(--safe-top);
+  padding-bottom: calc(20px + var(--safe-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 16px 14px 40px;
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.top-bar h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--accent-dark);
+}
+.badge {
+  font-size: 11px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.date-goal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 12px rgba(15,23,42,0.04);
+}
+.date-goal label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.date-goal input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid var(--line);
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  padding: 6px 0;
+  color: var(--ink);
+  outline: none;
+}
+.date-goal input:focus { border-bottom-color: var(--accent); }
+.date-goal .row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
+.progress-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: linear-gradient(135deg, #ccfbf1, #e0f2fe);
+  border: 1px solid #99f6e4;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.12);
+}
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.progress-head span {
+  background: #fff;
+  color: var(--accent-dark);
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.bar {
+  height: 10px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent-light));
+  border-radius: 99px;
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(15,23,42,0.03);
+}
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.section-title h2 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.time {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 8px;
+  margin: 0 -8px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.item:active { background: #f1f5f9; }
+.item input {
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.item.done span {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+.study-box {
+  background: linear-gradient(145deg, #f0fdfa, #ecfeff);
+  border: 1px solid #99f6e4;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.study-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 10px;
+}
+.study-inputs {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.study-inputs label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 3px;
+}
+.study-inputs input {
+  width: 100%;
+  border: 1.5px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+}
+.study-inputs input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(13,148,136,0.15);
+}
+.note {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  min-height: 48px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: var(--muted);
+  background: #fafbfc;
+  outline: none;
+}
+.note:focus {
+  border-color: var(--accent-light);
+  background: #fff;
+  color: var(--ink);
+}
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.score-table td, .score-table th {
+  border: 1px solid var(--line);
+  padding: 9px 10px;
+  text-align: right;
+}
+.score-table th {
+  background: var(--soft);
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+.score-table input {
+  width: 48px;
+  border: none;
+  border-bottom: 2px solid var(--line);
+  text-align: center;
+  font: inherit;
+  font-weight: 600;
+  background: transparent;
+  outline: none;
+}
+.score-table input:focus { border-bottom-color: var(--accent); }
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+.actions button, .btn-full {
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 12px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(13,148,136,0.3);
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  border: 1.5px solid var(--line) !important;
+}
+.btn-full {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
+  color: var(--muted);
+  border: 1.5px solid var(--line);
+}
+.footer-text {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding: 8px 4px 20px;
+}
+.footer-text strong { color: var(--accent-dark); }
+.install-tip {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: #9a3412;
+  line-height: 1.6;
+}
+.install-tip strong { display: block; margin-bottom: 4px; }
+.install-tip.hidden { display: none; }
+.rules-grid { display: grid; gap: 0; }
+@media (min-width: 500px) {
+  .rules-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+  .page { padding: 20px 18px 50px; }
+  .study-inputs { grid-template-columns: 1fr 1fr; }
+}
+@media print {
+  .install-tip, .actions, .btn-full { display: none !important; }
+  body { background: #fff; font-size: 9pt; }
+  .page { max-width: none; padding: 0; }
+  .section { break-inside: avoid; box-shadow: none; }
+  .progress-wrap { position: static; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar">
+    <h1>پلن روزانه من</h1>
+    <span class="badge">نظم • ترید</span>
+  </div>
+
+  <div class="install-tip" id="installTip">
+    <strong>📲 اضافه کردن به هوم‌اسکرین آیفون</strong>
+    در Safari دکمه Share (□↑) را بزن → گزینه <b>Add to Home Screen</b> را انتخاب کن.
+    بعد از اضافه شدن، این پیام دیگر نشان داده نمی‌شود.
+  </div>
+
+  <div class="date-goal">
+    <div class="row">
+      <div>
+        <label for="day">تاریخ</label>
+        <input id="day" type="date">
+      </div>
+      <div>
+        <label for="goal">هدف اصلی امروز</label>
+        <input id="goal" type="text" placeholder="مهم‌ترین خروجی...">
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-head">
+      <strong>پیشرفت امروز</strong>
+      <span id="progressText">۰٪</span>
+    </div>
+    <div class="bar"><span id="progressBar"></span></div>
+  </div>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>🌅 ۰۹:۰۰–۱۰:۰۰ | شروع روز</h2>
+      <span class="time">صبح</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="m1"><span>ساعت ۹ بیدار شدم؛ بدون اسنوز</span></label>
+    <label class="item"><input type="checkbox" data-key="m2"><span>آب، شستن صورت و مرتب‌کردن تخت</span></label>
+    <label class="item"><input type="checkbox" data-key="m3"><span>نور روز و تحرک سبک</span></label>
+    <label class="item"><input type="checkbox" data-key="m4"><span>صبحانه متعادل</span></label>
+    <label class="item"><input type="checkbox" data-key="m5"><span>تعیین ۳ اولویت اصلی روز</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>📚 ۱۰:۰۰–۱۳:۰۰ | آموزش و تحلیل</h2>
+      <span class="time">کار عمیق</span>
+    </div>
+    <div class="study-box">
+      <div class="study-title">📖 مطالعه روزانه دوره و کتاب</div>
+      <div class="study-inputs">
+        <div>
+          <label for="course-topic">بخش دوره امروز</label>
+          <input id="course-topic" type="text" placeholder="مثلاً: فصل ۳">
+        </div>
+        <div>
+          <label for="book-topic">صفحه / فصل کتاب</label>
+          <input id="book-topic" type="text" placeholder="مثلاً: ص ۴۵–۶۰">
+        </div>
+      </div>
+      <label class="item"><input type="checkbox" data-key="s1"><span>مطالعه بخش مشخص‌شده از دوره</span></label>
+      <label class="item"><input type="checkbox" data-key="s2"><span>مطالعه بخشی از کتاب + یادداشت نکات</span></label>
+    </div>
+    <label class="item"><input type="checkbox" data-key="s3"><span>بررسی تقویم اقتصادی و اخبار طلا</span></label>
+    <label class="item"><input type="checkbox" data-key="s4"><span>آموزش یک مبحث مشخص از دوره</span></label>
+    <label class="item"><input type="checkbox" data-key="s5"><span>تحلیل XAUUSD و نوشتن سناریوها</span></label>
+    <label class="item"><input type="checkbox" data-key="s6"><span>بک‌تست یا تمرین عملی</span></label>
+    <label class="item"><input type="checkbox" data-key="s7"><span>ثبت نکته‌ها و سؤال‌های آموزشی</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>🍽️ ۱۳:۰۰–۱۴:۰۰ | ناهار</h2>
+      <span class="time">ریکاوری</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="l1"><span>ناهار متعادل و آب کافی</span></label>
+    <label class="item"><input type="checkbox" data-key="l2"><span>فاصله از مانیتور و استراحت واقعی</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>💪 ۱۴:۰۰–۱۶:۰۰ | بدن و آمادگی</h2>
+      <span class="time">انرژی</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="b1"><span>چرت کوتاه اختیاری</span></label>
+    <label class="item"><input type="checkbox" data-key="b2"><span>پیاده‌روی یا تمرین مناسب</span></label>
+    <label class="item"><input type="checkbox" data-key="b3"><span>میان‌وعده و آماده‌شدن برای بازار</span></label>
+    <label class="item"><input type="checkbox" data-key="b4"><span>تعیین ریسک و سقف ضرر روزانه</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>📈 ۱۶:۰۰–۱۸:۳۰ | ترید / بک‌تست</h2>
+      <span class="time">تمرکز</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="t1"><span>بررسی نهایی سناریو و شرایط ورود</span></label>
+    <label class="item"><input type="checkbox" data-key="t2"><span>فقط معامله با ستاپ معتبر</span></label>
+    <label class="item"><input type="checkbox" data-key="t3"><span>رعایت ریسک و توقف در سقف ضرر</span></label>
+    <label class="item"><input type="checkbox" data-key="t4"><span>ثبت دلیل ورود/عدم ورود و احساسات</span></label>
+    <label class="item"><input type="checkbox" data-key="t5"><span>امتیازدهی به اجرای پلن</span></label>
+    <div class="note" id="tradeNote" contenteditable="true" data-placeholder="یادداشت ترید امروز..."></div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>🌙 ۱۸:۳۰–۲۰:۰۰ | شام و استراحت</h2>
+      <span class="time">قطع بازار</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="e1"><span>شام و استراحت</span></label>
+    <label class="item"><input type="checkbox" data-key="e2"><span>حرکت یا ارتباط با خانواده/دوستان</span></label>
+    <label class="item"><input type="checkbox" data-key="e3"><span>پایان بررسی وسواسی سود و زیان</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>🎮 ۲۰:۰۰–۲۲:۰۰ | تفریح</h2>
+      <span class="time">سرگرمی</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="f1"><span>تفریح با خیال راحت</span></label>
+    <label class="item"><input type="checkbox" data-key="f2"><span>رعایت زمان خواب</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>✨ ۲۲:۰۰–۰۰:۳۰ | رشد و خواب</h2>
+      <span class="time">جمع‌بندی</span>
+    </div>
+    <label class="item"><input type="checkbox" data-key="n1"><span>کار جانبی یا مهارت درآمدزا</span></label>
+    <label class="item"><input type="checkbox" data-key="n2"><span>آماده‌کردن ۳ اولویت فردا</span></label>
+    <label class="item"><input type="checkbox" data-key="n3"><span>آرام‌سازی و کم‌کردن نور صفحه</span></label>
+    <label class="item"><input type="checkbox" data-key="n4"><span>آماده‌شدن برای خواب حدود ۰۰:۳۰</span></label>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>🔒 قوانین غیرقابل‌مذاکره</h2>
+      <span class="time">هر روز</span>
+    </div>
+    <div class="rules-grid">
+      <label class="item"><input type="checkbox" data-key="r1"><span>گوشی بعد از روتین صبح</span></label>
+      <label class="item"><input type="checkbox" data-key="r2"><span>وقفه حرکتی هر ۳۰–۴۵ دقیقه</span></label>
+      <label class="item"><input type="checkbox" data-key="r3"><span>معامله‌نکردن بهتر از ورود بدون ستاپ</span></label>
+      <label class="item"><input type="checkbox" data-key="r4"><span>ژورنال حتی در روز بدون معامله</span></label>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>⭐ امتیاز روزانه از ۱۰</h2>
+    </div>
+    <table class="score-table">
+      <tr><th>معیار</th><th>امتیاز</th></tr>
+      <tr><td>خواب و شروع روز</td><td><input type="number" min="0" max="2" data-key="sc1" placeholder="۰–۲"></td></tr>
+      <tr><td>آموزش و تمرین</td><td><input type="number" min="0" max="2" data-key="sc2" placeholder="۰–۲"></td></tr>
+      <tr><td>رعایت پلن و ریسک</td><td><input type="number" min="0" max="2" data-key="sc3" placeholder="۰–۲"></td></tr>
+      <tr><td>سلامت و تحرک</td><td><input type="number" min="0" max="1" data-key="sc4" placeholder="۰–۱"></td></tr>
+      <tr><td>ژورنال و مرور</td><td><input type="number" min="0" max="1" data-key="sc5" placeholder="۰–۱"></td></tr>
+      <tr><td>کنترل زمان و تفریح</td><td><input type="number" min="0" max="2" data-key="sc6" placeholder="۰–۲"></td></tr>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>📝 مرور پایان روز</h2>
+    </div>
+    <div class="note" id="note1" contenteditable="true" data-placeholder="امروز چه کاری را خوب انجام دادم؟"></div>
+    <div class="note" id="note2" contenteditable="true" data-placeholder="چه چیزی را فردا بهتر می‌کنم؟"></div>
+    <div class="note" id="note3" contenteditable="true" data-placeholder="حال و انرژی امروز من:"></div>
+  </section>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="window.print()">چاپ / PDF</button>
+    <button class="btn-secondary" onclick="resetDay()">روز جدید</button>
+  </div>
+  <button class="btn-full" onclick="clearAll()">پاک‌کردن همه اطلاعات</button>
+
+  <div class="footer-text">
+    <strong>قانون طلایی:</strong> هدف کامل‌بودن هر روز نیست؛ هدف برگشتن به برنامه و تداوم است.
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'dailyRoutine_v2';
+
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
+}
+
+function save() {
+  const data = {
+    date: document.getElementById('day').value,
+    goal: document.getElementById('goal').value,
+    course: document.getElementById('course-topic').value,
+    book: document.getElementById('book-topic').value,
+    checks: {},
+    scores: {},
+    notes: {
+      trade: document.getElementById('tradeNote').innerText,
+      n1: document.getElementById('note1').innerText,
+      n2: document.getElementById('note2').innerText,
+      n3: document.getElementById('note3').innerText
+    },
+    savedAt: todayKey()
+  };
+  document.querySelectorAll('input[type="checkbox"][data-key]').forEach(c => {
+    data.checks[c.dataset.key] = c.checked;
+  });
+  document.querySelectorAll('.score-table input[data-key]').forEach(i => {
+    data.scores[i.dataset.key] = i.value;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function applyData(data) {
+  if (!data) return;
+  if (data.date) document.getElementById('day').value = data.date;
+  if (data.goal) document.getElementById('goal').value = data.goal;
+  if (data.course) document.getElementById('course-topic').value = data.course;
+  if (data.book) document.getElementById('book-topic').value = data.book;
+  if (data.checks) {
+    Object.entries(data.checks).forEach(([k, v]) => {
+      const el = document.querySelector('input[data-key="' + k + '"]');
+      if (el) el.checked = !!v;
+    });
+  }
+  if (data.scores) {
+    Object.entries(data.scores).forEach(([k, v]) => {
+      const el = document.querySelector('input[data-key="' + k + '"]');
+      if (el) el.value = v || '';
+    });
+  }
+  if (data.notes) {
+    const map = { trade: 'tradeNote', n1: 'note1', n2: 'note2', n3: 'note3' };
+    Object.entries(map).forEach(([k, id]) => {
+      const el = document.getElementById(id);
+      if (el && data.notes[k] && data.notes[k] !== el.dataset.placeholder) {
+        el.innerText = data.notes[k];
+      }
+    });
+  }
+}
+
+function updateProgress() {
+  const checks = [...document.querySelectorAll('input[type="checkbox"][data-key]')];
+  const n = checks.filter(c => c.checked).length;
+  const total = checks.length;
+  const pct = total ? Math.round(n / total * 100) : 0;
+  document.getElementById('progressText').textContent = pct.toLocaleString('fa-IR') + '٪';
+  document.getElementById('progressBar').style.width = pct + '%';
+  checks.forEach(c => {
+    const item = c.closest('.item');
+    if (item) item.classList.toggle('done', c.checked);
+  });
+}
+
+function resetDay() {
+  if (!confirm('تیک‌های امروز پاک شوند و روز جدید شروع شود؟')) return;
+  document.querySelectorAll('input[type="checkbox"][data-key]').forEach(c => c.checked = false);
+  document.querySelectorAll('.score-table input').forEach(i => i.value = '');
+  ['tradeNote','note1','note2','note3'].forEach(id => {
+    const el = document.getElementById(id);
+    el.innerText = el.dataset.placeholder || '';
+  });
+  document.getElementById('course-topic').value = '';
+  document.getElementById('book-topic').value = '';
+  document.getElementById('goal').value = '';
+  document.getElementById('day').valueAsDate = new Date();
+  updateProgress();
+  save();
+}
+
+function clearAll() {
+  if (!confirm('همه اطلاعات برای همیشه پاک شود؟')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  resetDay();
+}
+
+document.querySelectorAll('.note[data-placeholder]').forEach(el => {
+  if (!el.innerText.trim()) el.innerText = el.dataset.placeholder;
+  el.addEventListener('focus', function() {
+    if (this.innerText === this.dataset.placeholder) this.innerText = '';
+  });
+  el.addEventListener('blur', function() {
+    if (!this.innerText.trim()) this.innerText = this.dataset.placeholder;
+    save();
+  });
+  el.addEventListener('input', function() { save(); });
+});
+
+document.querySelectorAll('input').forEach(el => {
+  el.addEventListener('change', function() { updateProgress(); save(); });
+  el.addEventListener('input', function() { save(); });
+});
+
+if (window.navigator.standalone || localStorage.getItem('installTipHidden')) {
+  document.getElementById('installTip').classList.add('hidden');
+}
+document.getElementById('installTip').addEventListener('click', function() {
+  document.getElementById('installTip').classList.add('hidden');
+  localStorage.setItem('installTipHidden', '1');
+});
+
+const saved = load();
+if (saved && saved.savedAt === todayKey()) {
+  applyData(saved);
+} else {
+  document.getElementById('day').valueAsDate = new Date();
+}
+updateProgress();
+</script>
+</body>
+</html>
